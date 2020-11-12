@@ -1,20 +1,27 @@
-import email.message as emsg
+from email.mime.multipart import MIMEMultipart 
 
-msg = emsg.EmailMessage()
-msg['From'] = 'ewfwefwefw@gmail.com'
-msg['To'] = 'molkmokm@gmail.com'
-msg['Subject'] = '測試gmail_by_hcy'
+from email.mime.text import MIMEText 
+
+from email.mime.image import MIMEImage
+
+from pathlib import Path
+
+content = MIMEMultipart()
+content['From'] = 'test@gmail.com@gmail.com'
+content['To'] = 'test2@gmail.com'
+content['Subject'] = '測試gmail_by_lordarcher'
 
 # 純文字內容
-msg.set_content('lord你好,\n' + 'gmail發送測試成功\n' + 'Frank')
+content.attach(MIMEText('lord你好,\n' + 'gmail發送測試成功\n' + '{:20}by Frank'.format('')))
 
-# 寄送多樣式內容 (html)
-msg.add_alternative('<h3>優惠券</h3>滿千送百', subtype = 'html')
+# 圖片
+content.attach(MIMEImage(Path('多拉.jpg').read_bytes()))
 
 # 連線到server
 import smtplib
 
-server = smtplib.SMTP_SSL('smtp.gmail.com', 465) # gmail server
-server.login('hgfhghrh@gmail.com', '6ygnhjt') # 發送端帳戶(帳,密)
-server.send_message(msg)
+server = smtplib.SMTP_SSL(host = 'smtp.gmail.com',port = 465) # gmail server
+server.login('test@gmail.com', '123456789') # 發送端帳戶(帳,密)
+server.send_message(content)
 server.close()
+print('Complete!')
